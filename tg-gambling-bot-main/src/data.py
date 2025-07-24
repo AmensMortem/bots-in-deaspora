@@ -2,8 +2,8 @@ from telebot.types import InlineKeyboardButton
 
 user_chat = '145049474'
 MY_OUTER = '-1002417378626'
-diaspora_program_chat = ''
-topic_program_chat = ''
+diaspora_program_chat = '-1002017149764'
+topic_program_chat = '4955'
 developer_HELP = '5963239489'
 IT_CHAT = '-1002116801818'
 IT_TOPIC = int('11147')
