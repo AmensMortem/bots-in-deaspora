@@ -4,7 +4,8 @@ from os import environ
 from datetime import datetime
 import random
 from src.data import (user_chat, developer_HELP, user_data, questions, dead_end_message, \
-                      end_message, links_buttons, sentences, end_time, draw_time, gambling_text, parameters)
+                      end_message, links_buttons, sentences, end_time, draw_time, gambling_text, parameters,
+                      diaspora_program_chat, topic_program_chat)
 from src.db.database_postgre import DataBase, create_database
 
 BOT_TOKEN = environ["BOT_TOKEN"]
@@ -35,8 +36,26 @@ def chat_id(message):
 def bot_help(message):
     if message.chat.type == 'private':
         bot.send_message(message.chat.id, text='Команда /topic для того что бы предложить нам тему.\n'
+                                               'Команда /share для того что бы анонимно написать администрации'
                                                'Команда /new_gambling для того что бы создать новый конкурс\n'
                                                'Команда /view для того что бы посмотреть свои конкурсы')
+
+
+@bot.message_handler(commands=["share"])
+def share_opinion_1(message):
+    if message.chat.type == 'private':
+        try:
+            bot.send_message(message.chat.id,
+                             'Напишите свой анонимный вопрос/предложение к администрации Русской диаспоры')
+            bot.register_next_step_handler(message, share_opinion_2)
+        except Exception as e:
+            bot.send_message(developer_HELP, text=e)
+
+
+def share_opinion_2(message):
+    bot.send_message(message.chat.id, 'Сообщение отправлено, спасибо!')
+    bot.send_message(diaspora_program_chat, f'Анонимное сообщение: {message.text}',
+                     message_thread_id=topic_program_chat)
 
 
 @bot.message_handler(commands=["topic"])
